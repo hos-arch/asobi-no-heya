@@ -124,18 +124,21 @@
   // GitHub から読めないときにも出す、いまの一覧（予備）。
   // order は並び順だけに使う（画面には出さない）。小さい数が上。
   // url が空のものは「じゅんび中」として、押せない形で出ます。
+  // 公開アドレスは「リポジトリ名.アカウント名.workers.dev」の形（Cloudflare Workers）。
+  const BASE = "hosoya5237.workers.dev";
+  const at = (name) => `https://${name}.${BASE}/`;
   const LOCAL = [
     { id:"oto-wo-miru",          title:"おとを みる",            desc:"音のする方を見て、見つけると絵が出てくる。",       order:[1,2],   icon:"oto" },
-    { id:"te-asobi",             title:"て あそび",              desc:"入れる・ひっぱる・ちぎる・めくる・とおす・まわす。", order:[5,1],   icon:"te" },
-    { id:"hako-asobi",           title:"はこ あそび",            desc:"おす・すべらせる・まわすと、窓に絵が出るしかけ箱。", order:[5,2],   icon:"hako" },
-    { id:"sasu-asobi",           title:"さす あそび",            desc:"穴や棒に、合う物をさして入れる。",                 order:[6,1,1], icon:"sasu" },
-    { id:"hame-asobi",           title:"はめ あそび",            desc:"形や絵のピースを、合う場所にはめる。",             order:[6,1,2], icon:"hame" },
-    { id:"kaku-asobi",           title:"かく あそび",            desc:"線をかく・なぞる・ぬる・点をむすぶ。",             order:[6,2],   icon:"kaku" },
-    { id:"kiru-asobi",           title:"きる あそび",            desc:"はさみで切る線を、指でなぞって確かめる。",         order:[6,3,1], icon:"kiru" },
-    { id:"oru-asobi",            title:"おる あそび",            desc:"紙の角と角を合わせて、半分に折る。",               order:[6,3,2], icon:"oru" },
-    { id:"kumitate-asobi",       title:"くみたて あそび",        desc:"見本の上に、同じ形を重ねて置く。",                 order:[7,1,1], icon:"kumitate" },
-    { id:"mihon-kumitate-asobi", title:"みほん くみたて あそび", desc:"見本を見て、となりに同じ形をつくる。",             order:[7,1,2], icon:"mihon" },
-    { id:"kao-karada-asobi",     title:"かお からだ あそび",     desc:"顔や体の場所を、指さしたり置いたりする。",         order:[7,2],   icon:"kao" }
+    { id:"te-asobi", url:at("te-asobi"),             title:"て あそび",              desc:"入れる・ひっぱる・ちぎる・めくる・とおす・まわす。", order:[5,1],   icon:"te" },
+    { id:"hako-asobi", url:at("hako-asobi"),           title:"はこ あそび",            desc:"おす・すべらせる・まわすと、窓に絵が出るしかけ箱。", order:[5,2],   icon:"hako" },
+    { id:"sasu-asobi", url:at("sasu-asobi"),           title:"さす あそび",            desc:"穴や棒に、合う物をさして入れる。",                 order:[6,1,1], icon:"sasu" },
+    { id:"hame-asobi", url:at("hame-asobi"),           title:"はめ あそび",            desc:"形や絵のピースを、合う場所にはめる。",             order:[6,1,2], icon:"hame" },
+    { id:"kaku-asobi", url:at("kaku-asobi"),           title:"かく あそび",            desc:"線をかく・なぞる・ぬる・点をむすぶ。",             order:[6,2],   icon:"kaku" },
+    { id:"kiru-asobi", url:at("kiru-asobi"),           title:"きる あそび",            desc:"はさみで切る線を、指でなぞって確かめる。",         order:[6,3,1], icon:"kiru" },
+    { id:"oru-asobi", url:at("oru-asobi"),            title:"おる あそび",            desc:"紙の角と角を合わせて、半分に折る。",               order:[6,3,2], icon:"oru" },
+    { id:"kumitate-asobi", url:at("kumitate-asobi"),       title:"くみたて あそび",        desc:"見本の上に、同じ形を重ねて置く。",                 order:[7,1,1], icon:"kumitate" },
+    { id:"mihon-kumitate-asobi", url:at("mihon-kumitate-asobi"), title:"みほん くみたて あそび", desc:"見本を見て、となりに同じ形をつくる。",             order:[7,1,2], icon:"mihon" },
+    { id:"kao-karada-asobi", url:at("kao-karada-asobi"),     title:"かお からだ あそび",     desc:"顔や体の場所を、指さしたり置いたりする。",         order:[7,2],   icon:"kao" }
   ];
 
   /* ===== 絵（文字なし） =========================================== */
@@ -228,7 +231,7 @@
 
   /* ===== 道具 ===================================================== */
   const $ = (s, r=document) => r.querySelector(s);
-  const safeUrl = (u) => { try { const x = new URL(u, location.href); return (x.protocol === "https:" || x.protocol === "http:") ? x.href : ""; } catch { return ""; } };
+  const safeUrl = (u) => { if (!u) return ""; try { const x = new URL(u, location.href); return (x.protocol === "https:" || x.protocol === "http:") ? x.href : ""; } catch { return ""; } };
   const orderOf = (a) => Array.isArray(a.order) ? a.order.map(Number) : (typeof a.order === "number" ? [a.order] : [999]);
   function cmp(a, b){
     const x = orderOf(a), y = orderOf(b);
