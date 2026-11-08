@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="手や目をつかう、やさしい療育の あそびアプリの いちらん。">
+<meta name="theme-color" content="#f4ecdc">
+<title>あそびの へや</title>
+<style>
+  :root{
+    --paper:#f4ecdc; --paper2:#efe4cf; --card:#fffaf0; --ink:#5e4a3a; --ink-soft:#8a7462;
+    --wood:#c99d70; --wood-dark:#a87c52; --wood-line:#b88a5e;
+    --red:#e48f7c; --yellow:#f2c76b; --green:#8fbf8a; --blue:#86b2d6; --pink:#eaa7b8; --purple:#b6a2d8;
+    --shadow:0 3px 0 rgba(120,90,60,.12), 0 8px 18px rgba(120,90,60,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:"Hiragino Maru Gothic ProN","Hiragino Maru Gothic Pro","Zen Maru Gothic","BIZ UDPGothic","Hiragino Sans","Noto Sans JP",sans-serif;
+    color:var(--ink); background-color:var(--paper);
+    background-image:
+      radial-gradient(rgba(150,115,80,.07) 1px, transparent 1.2px),
+      radial-gradient(rgba(150,115,80,.05) 1px, transparent 1.2px);
+    background-size:22px 22px, 31px 31px; background-position:0 0, 11px 7px;
+    min-height:100vh; -webkit-text-size-adjust:100%;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  .wrap{max-width:1100px; margin:0 auto; padding:18px 16px 40px}
+
+  /* 木の看板 */
+  header{display:flex; justify-content:center; margin:6px 0 22px}
+  .sign{
+    position:relative; padding:14px 34px 16px; transform:rotate(-.8deg);
+    background:
+      repeating-linear-gradient(176deg, rgba(255,255,255,.0) 0 9px, rgba(120,80,40,.10) 9px 10px, rgba(255,255,255,0) 10px 23px),
+      linear-gradient(180deg,#d4aa7c,#c3966a);
+    border-radius:20px 26px 18px 24px / 24px 18px 26px 20px;
+    box-shadow:inset 0 0 0 3px var(--wood-dark), var(--shadow);
+  }
+  .sign h1{margin:0; font-size:clamp(26px,5.4vw,40px); letter-spacing:.12em; color:#fffaf0; text-shadow:0 2px 0 rgba(110,70,35,.35); font-weight:700}
+  .sign .leaf{position:absolute; width:26px; height:26px; top:-12px; right:16px}
+  .sign .leaf2{left:12px; right:auto; top:auto; bottom:-12px; transform:rotate(160deg)}
+
+  /* いちらん */
+  .grid{list-style:none; margin:0; padding:0; display:grid; gap:18px;
+    grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}
+  @media (max-width:520px){ .grid{grid-template-columns:repeat(2,1fr); gap:12px} }
+  @media (max-width:330px){ .grid{grid-template-columns:1fr} }
+
+  .card{
+    display:flex; flex-direction:column; height:100%; text-decoration:none; color:inherit;
+    background:var(--card); padding:10px 10px 14px; position:relative;
+    border-radius:18px 22px 16px 24px / 22px 16px 24px 18px;
+    box-shadow:inset 0 0 0 2px rgba(201,157,112,.45), var(--shadow);
+    transition:transform .25s ease, box-shadow .25s ease;
+    -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+  }
+  .grid li:nth-child(3n+1) .card{transform:rotate(-.5deg)}
+  .grid li:nth-child(3n+2) .card{transform:rotate(.4deg)}
+  .grid li:nth-child(3n) .card{transform:rotate(-.2deg)}
+  a.card:hover{transform:translateY(-3px) rotate(0)}
+  a.card:active{transform:translateY(1px) scale(.985)}
+  a.card:focus-visible{outline:3px solid var(--blue); outline-offset:3px}
+
+  .thumb{
+    aspect-ratio:4/3; border-radius:14px 16px 12px 18px; overflow:hidden;
+    display:grid; place-items:center; background:var(--tint,#f3e6cf);
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.6);
+  }
+  .thumb svg{width:72%; height:auto; max-height:92%}
+  .thumb img{width:100%; height:100%; object-fit:cover; display:block}
+  .num{
+    position:absolute; top:4px; left:4px; width:30px; height:30px; border-radius:50%;
+    display:grid; place-items:center; font-size:15px; font-weight:700; color:#fffaf0;
+    background:var(--wood); box-shadow:inset 0 0 0 2px var(--wood-dark);
+  }
+  .title{margin:12px 4px 4px; font-size:clamp(17px,2.4vw,21px); font-weight:700; letter-spacing:.06em; line-height:1.35}
+  .desc{margin:0 4px; font-size:13.5px; line-height:1.55; color:var(--ink-soft)}
+  @media (max-width:520px){ .title{font-size:16px; margin-top:9px} .desc{font-size:12px} .num{width:26px;height:26px;font-size:13px} }
+
+  .card.soon{opacity:.55}
+  .card.soon .thumb{filter:grayscale(.5)}
+  .soonmark{display:inline-block; margin:8px 4px 0; font-size:11.5px; color:var(--ink-soft); border:1.5px dashed var(--wood); border-radius:999px; padding:1px 10px; align-self:flex-start}
+
+  h2.group{margin:34px 4px 14px; font-size:18px; letter-spacing:.1em; color:var(--ink-soft); display:flex; align-items:center; gap:10px}
+  h2.group::after{content:""; flex:1; border-top:2px dashed rgba(201,157,112,.6)}
+
+  footer{margin-top:40px; text-align:center; font-size:12px; line-height:1.8; color:var(--ink-soft)}
+
+  @media (prefers-reduced-motion:reduce){ .card{transition:none} a.card:hover,a.card:active{transform:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="sign">
+      <svg class="leaf" viewBox="0 0 26 26" aria-hidden="true"><path d="M3 23C3 10 11 3 23 3c0 12-7 20-20 20z" fill="#8fbf8a"/><path d="M5 21L19 7" stroke="#6f9d6a" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <svg class="leaf leaf2" viewBox="0 0 26 26" aria-hidden="true"><path d="M3 23C3 10 11 3 23 3c0 12-7 20-20 20z" fill="#a9cf96"/><path d="M5 21L19 7" stroke="#6f9d6a" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <h1>あそびの へや</h1>
+    </div>
+  </header>
+
+  <main>
+    <ul class="grid" id="main"></ul>
+    <div id="other"></div>
+  </main>
+
+  <footer>
+    上から順に、ひとつずつ進めていく並びです。<br>
+    参考書籍の考え方をもとにした試作です。治療の効果をうたうものではありません。<br>
+    名前・記録・写真・声は保存しません。
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  /* ===== 設定 ===================================================== */
+  // GitHub で、この「トピック」をつけた公開リポジトリを、自動で一覧に足します。
+  const OWNER = "hos-arch";
+  const TOPIC = "ryoiku-app";
+
+  // GitHub から読めないときにも出す、いまの一覧（予備）。
+  // order は並び順だけに使う（画面には出さない）。小さい数が上。
+  // url が空のものは「じゅんび中」として、押せない形で出ます。
+  const LOCAL = [
+    { id:"oto-wo-miru",          title:"おとを みる",            desc:"音のする方を見て、見つけると絵が出てくる。",       order:[1,2],   icon:"oto" },
+    { id:"te-asobi",             title:"て あそび",              desc:"入れる・ひっぱる・ちぎる・めくる・とおす・まわす。", order:[5,1],   icon:"te" },
+    { id:"hako-asobi",           title:"はこ あそび",            desc:"おす・すべらせる・まわすと、窓に絵が出るしかけ箱。", order:[5,2],   icon:"hako" },
+    { id:"sasu-asobi",           title:"さす あそび",            desc:"穴や棒に、合う物をさして入れる。",                 order:[6,1,1], icon:"sasu" },
+    { id:"hame-asobi",           title:"はめ あそび",            desc:"形や絵のピースを、合う場所にはめる。",             order:[6,1,2], icon:"hame" },
+    { id:"kaku-asobi",           title:"かく あそび",            desc:"線をかく・なぞる・ぬる・点をむすぶ。",             order:[6,2],   icon:"kaku" },
+    { id:"kiru-asobi",           title:"きる あそび",            desc:"はさみで切る線を、指でなぞって確かめる。",         order:[6,3,1], icon:"kiru" },
+    { id:"oru-asobi",            title:"おる あそび",            desc:"紙の角と角を合わせて、半分に折る。",               order:[6,3,2], icon:"oru" },
+    { id:"kumitate-asobi",       title:"くみたて あそび",        desc:"見本の上に、同じ形を重ねて置く。",                 order:[7,1,1], icon:"kumitate" },
+    { id:"mihon-kumitate-asobi", title:"みほん くみたて あそび", desc:"見本を見て、となりに同じ形をつくる。",             order:[7,1,2], icon:"mihon" },
+    { id:"kao-karada-asobi",     title:"かお からだ あそび",     desc:"顔や体の場所を、指さしたり置いたりする。",         order:[7,2],   icon:"kao" }
+  ];
+
+  /* ===== 絵（文字なし） =========================================== */
+  const INK = "#5e4a3a";
+  const S = `stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"`;
+  const ICONS = {
+    oto:{tint:"#fbeccc", svg:`
+      <path d="M90 42q9 14 0 28M99 34q15 22 0 44" fill="none" stroke="#86b2d6" stroke-width="5" stroke-linecap="round"/>
+      <path d="M30 42q-9 14 0 28M21 34q-15 22 0 44" fill="none" stroke="#86b2d6" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="60" cy="25" r="5" fill="#f2c76b" ${S}/>
+      <path d="M60 30c-15 0-22 12-22 28v12l-7 9h58l-7-9V58c0-16-7-28-22-28z" fill="#f2c76b" ${S}/>
+      <circle cx="60" cy="87" r="6" fill="#d39a4a" ${S}/>
+      <circle cx="53" cy="60" r="2.6" fill="${INK}"/><circle cx="67" cy="60" r="2.6" fill="${INK}"/>
+      <path d="M55 68q5 4 10 0" fill="none" ${S}/>`},
+    te:{tint:"#e3eff3", svg:`
+      <rect x="47" y="38" width="26" height="12" rx="4" fill="#d9c3a5" ${S}/>
+      <path d="M38 50h44q6 0 6 8v34q0 10-10 10H42q-10 0-10-10V58q0-8 6-8z" fill="#d7ebf3" ${S}/>
+      <circle cx="48" cy="90" r="6" fill="#e48f7c" ${S}/><circle cx="62" cy="91" r="6" fill="#f2c76b" ${S}/>
+      <circle cx="74" cy="89" r="6" fill="#8fbf8a" ${S}/><circle cx="55" cy="79" r="6" fill="#b6a2d8" ${S}/>
+      <circle cx="60" cy="18" r="7" fill="#eaa7b8" ${S}/>
+      <path d="M60 28v4" ${S}/>`},
+    hako:{tint:"#f6e3cf", svg:`
+      <rect x="16" y="28" width="88" height="68" rx="12" fill="#e9b98c" ${S}/>
+      <rect x="27" y="39" width="40" height="32" rx="7" fill="#fffaf0" ${S}/>
+      <path d="M47 50c-6-4-12 1-10 8 2 6 6 9 10 9s8-3 10-9c2-7-4-12-10-8z" fill="#e48f7c" ${S}/>
+      <path d="M47 50q1-5 4-6" fill="none" ${S}/>
+      <circle cx="86" cy="54" r="10" fill="#e48f7c" ${S}/>
+      <path d="M27 84h58" ${S}/><rect x="56" y="78" width="12" height="12" rx="4" fill="#86b2d6" ${S}/>`},
+    sasu:{tint:"#efe7f5", svg:`
+      <rect x="16" y="88" width="88" height="14" rx="6" fill="#c99d70" ${S}/>
+      <rect x="31" y="34" width="9" height="56" rx="4.5" fill="#e6d3b6" ${S}/>
+      <rect x="56" y="34" width="9" height="56" rx="4.5" fill="#e6d3b6" ${S}/>
+      <rect x="81" y="34" width="9" height="56" rx="4.5" fill="#e6d3b6" ${S}/>
+      <rect x="23" y="76" width="25" height="11" rx="5.5" fill="#e48f7c" ${S}/>
+      <rect x="23" y="64" width="25" height="11" rx="5.5" fill="#e48f7c" ${S}/>
+      <rect x="48" y="76" width="25" height="11" rx="5.5" fill="#86b2d6" ${S}/>
+      <rect x="73" y="16" width="25" height="11" rx="5.5" fill="#f2c76b" ${S}/>`},
+    hame:{tint:"#e6f0e1", svg:`
+      <rect x="14" y="44" width="92" height="58" rx="10" fill="#c99d70" ${S}/>
+      <circle cx="40" cy="73" r="14" fill="#8a6a4c" ${S}/>
+      <rect x="66" y="59" width="28" height="28" rx="3" fill="#8a6a4c" ${S}/>
+      <circle cx="40" cy="22" r="14" fill="#86b2d6" ${S}/>
+      <path d="M40 40v4" stroke="#86b2d6" stroke-width="3" stroke-dasharray="2 4" stroke-linecap="round"/>`},
+    kaku:{tint:"#fdf3dd", svg:`
+      <path d="M14 88c14-22 26 16 40-4s26 14 44-8" fill="none" stroke="#8fbf8a" stroke-width="8" stroke-linecap="round"/>
+      <g transform="rotate(-38 76 40)">
+        <path d="M56 32h44q4 0 4 4v8q0 4-4 4H56z" fill="#e48f7c" ${S}/>
+        <path d="M56 32l-15 8 15 8z" fill="#f4c2b6" ${S}/>
+        <path d="M41 40l5-2.7v5.4z" fill="${INK}"/>
+        <path d="M70 32v16M88 32v16" stroke="#fffaf0" stroke-width="3"/>
+      </g>`},
+    kiru:{tint:"#e7eff8", svg:`
+      <rect x="22" y="22" width="76" height="80" rx="4" fill="#f2c76b" ${S}/>
+      <path d="M60 94V64" stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 8"/>
+      <path d="M58 64V96M62 64V96" stroke="#fffaf0" stroke-width="2"/>
+      <path d="M60 64V36" stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-dasharray="5 7"/>
+      <circle cx="60" cy="96" r="8" fill="#8fbf8a" ${S}/>
+      <path d="M60 22l3.5 7 7.5 1-5.5 5 1.4 7.5L60 39l-6.9 3.5L54.5 35 49 30l7.5-1z" fill="#fffaf0" ${S}/>`},
+    oru:{tint:"#f8e6ea", svg:`
+      <path d="M22 98V22h76z" fill="#fffaf0" ${S}/>
+      <path d="M22 98L98 22v76z" fill="#eaa7b8" ${S}/>
+      <path d="M22 98L98 22" stroke="${INK}" stroke-width="2.5" stroke-dasharray="4 6" stroke-linecap="round"/>
+      <circle cx="31" cy="31" r="6" fill="none" stroke="#e48f7c" stroke-width="3"/>
+      <circle cx="89" cy="89" r="6" fill="#e48f7c" ${S}/>
+      <path d="M40 40q22 0 36 34" fill="none" stroke="#b6a2d8" stroke-width="4" stroke-linecap="round"/>
+      <path d="M70 72l6 3 1-7" fill="none" stroke="#b6a2d8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`},
+    kumitate:{tint:"#fbeccc", svg:`
+      <rect x="16" y="16" width="88" height="88" rx="10" fill="#fffaf0" stroke="#c99d70" stroke-width="3" stroke-dasharray="6 6"/>
+      <path d="M28 58L60 30l32 28z" fill="#e48f7c" ${S}/>
+      <rect x="36" y="58" width="48" height="34" fill="#f2c76b" ${S}/>
+      <rect x="54" y="70" width="13" height="22" fill="#86b2d6" ${S}/>`},
+    mihon:{tint:"#e6f0e1", svg:`
+      <rect x="8" y="24" width="50" height="72" rx="8" fill="#fffaf0" ${S}/>
+      <path d="M15 58l18-16 18 16z" fill="#e48f7c" ${S}/><rect x="20" y="58" width="26" height="24" fill="#f2c76b" ${S}/>
+      <rect x="62" y="24" width="50" height="72" rx="8" fill="#fffaf0" ${S}/>
+      <path d="M69 58l18-16 18 16z" fill="#e48f7c" ${S}/>
+      <rect x="74" y="58" width="26" height="24" fill="none" stroke="#c99d70" stroke-width="3" stroke-dasharray="4 5"/>`},
+    kao:{tint:"#f6e3cf", svg:`
+      <circle cx="26" cy="64" r="8" fill="#f6d2b4" ${S}/><circle cx="94" cy="64" r="8" fill="#f6d2b4" ${S}/>
+      <circle cx="60" cy="62" r="34" fill="#f6d2b4" ${S}/>
+      <path d="M26 58c0-24 16-36 34-36s34 12 34 36c-8-9-20-13-34-13s-26 4-34 13z" fill="#9a6a45" ${S}/>
+      <circle cx="48" cy="64" r="4" fill="${INK}"/><circle cx="72" cy="64" r="4" fill="${INK}"/>
+      <circle cx="49.4" cy="62.6" r="1.2" fill="#fff"/><circle cx="73.4" cy="62.6" r="1.2" fill="#fff"/>
+      <path d="M60 70v4" ${S}/><path d="M52 82q8 6 16 0" fill="none" ${S}/>`},
+    star:{tint:"#efe7f5", svg:`
+      <path d="M60 18l11 23 25 3-18 17 5 25-23-12-23 12 5-25-18-17 25-3z" fill="#f2c76b" ${S}/>
+      <circle cx="52" cy="58" r="2.6" fill="${INK}"/><circle cx="68" cy="58" r="2.6" fill="${INK}"/>
+      <path d="M55 66q5 4 10 0" fill="none" ${S}/>`}
+  };
+
+  /* ===== 道具 ===================================================== */
+  const $ = (s, r=document) => r.querySelector(s);
+  const safeUrl = (u) => { try { const x = new URL(u, location.href); return (x.protocol === "https:" || x.protocol === "http:") ? x.href : ""; } catch { return ""; } };
+  const orderOf = (a) => Array.isArray(a.order) ? a.order.map(Number) : (typeof a.order === "number" ? [a.order] : [999]);
+  function cmp(a, b){
+    const x = orderOf(a), y = orderOf(b);
+    for (let i = 0; i < Math.max(x.length, y.length); i++){
+      const p = x[i] ?? 0, q = y[i] ?? 0;
+      if (p !== q) return p - q;
+    }
+    return String(a.title).localeCompare(String(b.title), "ja");
+  }
+  const withTimeout = (ms) => { const c = new AbortController(); setTimeout(() => c.abort(), ms); return c.signal; };
+
+  /* ===== GitHub から集める ========================================= */
+  async function fromGitHub(){
+    const res = await fetch(`https://api.github.com/users/${OWNER}/repos?per_page=100&sort=created`,
+      { headers:{ Accept:"application/vnd.github+json" }, signal:withTimeout(6000) });
+    if (!res.ok) throw new Error("GitHub " + res.status);
+    const repos = (await res.json()).filter(r => !r.private && !r.archived && (r.topics || []).includes(TOPIC));
+    return Promise.all(repos.map(async (repo) => {
+      const raw = `https://raw.githubusercontent.com/${OWNER}/${repo.name}/${repo.default_branch}/`;
+      let meta = {};
+      try {
+        const m = await fetch(raw + "app.json", { cache:"no-cache", signal:withTimeout(6000) });
+        if (m.ok) meta = await m.json();
+      } catch (e) { /* app.json がなくても、リポジトリの情報で出す */ }
+      return {
+        // app.json に書いたもの（いちばん強い）
+        meta: {
+          id: meta.id, title: meta.title, desc: meta.desc, url: meta.url, order: meta.order,
+          icon: meta.icon, thumb: meta.thumb ? new URL(meta.thumb, raw).href : "",
+          group: meta.group, hidden: meta.hidden === true ? true : undefined
+        },
+        // リポジトリの情報（予備の一覧にも app.json にもないときだけ使う）
+        repo: {
+          id: repo.name, title: repo.name, desc: repo.description || "", url: repo.homepage || "",
+          icon: repo.name.replace(/-asobi$/, ""), group: "main"
+        }
+      };
+    }));
+  }
+
+  // 強さの順：app.json ＞ 予備の一覧 ＞ リポジトリの情報
+  function merge(local, remote){
+    const map = new Map(local.map(a => [a.id, { ...a, group:"main" }]));
+    const set = (out, obj, onlyEmpty) => {
+      for (const [k, v] of Object.entries(obj)){
+        if (v === "" || v === undefined || v === null) continue;
+        if (onlyEmpty && out[k] !== undefined && out[k] !== "") continue;
+        out[k] = v;
+      }
+    };
+    for (const r of remote){
+      const id = r.meta.id || r.repo.id;
+      const out = { ...(map.get(id) || {}) };
+      set(out, r.meta, false);
+      set(out, r.repo, true);
+      out.id = id;
+      map.set(id, out);
+    }
+    return [...map.values()].filter(a => !a.hidden);
+  }
+
+  /* ===== 描く ===================================================== */
+  function card(app, n){
+    const li = document.createElement("li");
+    const url = safeUrl(app.url || "");
+    const el = document.createElement(url ? "a" : "div");
+    el.className = "card" + (url ? "" : " soon");
+    if (url) el.href = url;
+    else el.setAttribute("aria-disabled", "true");
+
+    const th = document.createElement("div");
+    th.className = "thumb";
+    const ic = ICONS[app.icon] || ICONS.star;
+    th.style.setProperty("--tint", ic.tint);
+    const thumb = safeUrl(app.thumb || "");
+    if (thumb){
+      const img = document.createElement("img");
+      img.src = thumb; img.alt = ""; img.loading = "lazy";
+      img.onerror = () => { th.innerHTML = `<svg viewBox="0 0 120 120" aria-hidden="true">${ic.svg}</svg>`; };
+      th.appendChild(img);
+    } else {
+      th.innerHTML = `<svg viewBox="0 0 120 120" aria-hidden="true">${ic.svg}</svg>`;
+    }
+    el.appendChild(th);
+
+    if (n){
+      const num = document.createElement("span");
+      num.className = "num"; num.textContent = n; num.setAttribute("aria-hidden", "true");
+      el.appendChild(num);
+    }
+    const t = document.createElement("p"); t.className = "title"; t.textContent = app.title; el.appendChild(t);
+    if (app.desc){ const d = document.createElement("p"); d.className = "desc"; d.textContent = app.desc; el.appendChild(d); }
+    if (!url){ const s = document.createElement("span"); s.className = "soonmark"; s.textContent = "じゅんび中"; el.appendChild(s); }
+
+    li.appendChild(el);
+    return li;
+  }
+
+  function render(list){
+    const main = list.filter(a => (a.group || "main") === "main").sort(cmp);
+    const other = list.filter(a => a.group && a.group !== "main").sort(cmp);
+    const ul = $("#main"); ul.replaceChildren(...main.map((a, i) => card(a, i + 1)));
+    const box = $("#other"); box.replaceChildren();
+    if (other.length){
+      const h = document.createElement("h2"); h.className = "group"; h.textContent = "ほかの あそび";
+      const ul2 = document.createElement("ul"); ul2.className = "grid";
+      ul2.replaceChildren(...other.map(a => card(a, 0)));
+      box.append(h, ul2);
+    }
+  }
+
+  render(merge(LOCAL, []));
+  fromGitHub()
+    .then(remote => { render(merge(LOCAL, remote)); console.info(`[あそびの へや] GitHub から ${remote.length} 件`); })
+    .catch(e => console.info("[あそびの へや] GitHub を読めなかったので、予備の一覧を出しています:", e.message));
+})();
+</script>
+</body>
+</html>

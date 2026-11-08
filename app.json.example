@@ -1,0 +1,11 @@
+{
+  "id": "kao-karada-asobi",
+  "title": "かお からだ あそび",
+  "desc": "顔や体の場所を、指さしたり置いたりする。",
+  "url": "https://kao-karada-asobi.example.workers.dev/",
+  "order": [7, 2],
+  "icon": "kao",
+  "thumb": "",
+  "group": "main",
+  "hidden": false
+}
