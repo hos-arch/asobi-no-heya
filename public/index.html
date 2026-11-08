@@ -128,6 +128,8 @@
   const BASE = "vbw.workers.dev";
   const at = (name) => `https://${name}.${BASE}/`;
   const LOCAL = [
+    { id:"fuku-asobi",           url:at("fuku-asobi"), title:"ふく あそび",     desc:"風船がふくらんで、飛んでいくのを目で追う。", order:[1,1,3], icon:"fuku" },
+    { id:"tamaotoshi",           url:at("tamaotoshi"), title:"たまおとし",      desc:"落ちる玉を、目で追う。",                       order:[1,1,4], icon:"tama" },
     { id:"oto-wo-miru",          url:at("oto-minamoto"), title:"おとを みる",            desc:"音のする方を見て、見つけると絵が出てくる。",       order:[1,2],   icon:"oto" },
     { id:"te-asobi", url:at("te-asobi"),             title:"て あそび",              desc:"入れる・ひっぱる・ちぎる・めくる・とおす・まわす。", order:[5,1],   icon:"te" },
     { id:"hako-asobi", url:at("hako-asobi"),           title:"はこ あそび",            desc:"おす・すべらせる・まわすと、窓に絵が出るしかけ箱。", order:[5,2],   icon:"hako" },
@@ -138,9 +140,7 @@
     { id:"oru-asobi", url:at("oru-asobi"),            title:"おる あそび",            desc:"紙の角と角を合わせて、半分に折る。",               order:[6,3,2], icon:"oru" },
     { id:"kumitate-asobi", url:at("kumitate-asobi"),       title:"くみたて あそび",        desc:"見本の上に、同じ形を重ねて置く。",                 order:[7,1,1], icon:"kumitate" },
     { id:"mihon-kumitate-asobi", url:at("mihon-kumitate-asobi"), title:"みほん くみたて あそび", desc:"見本を見て、となりに同じ形をつくる。",             order:[7,1,2], icon:"mihon" },
-    { id:"kao-karada-asobi", url:at("kao-karada-asobi"),     title:"かお からだ あそび",     desc:"顔や体の場所を、指さしたり置いたりする。",         order:[7,2],   icon:"kao" },
-    { id:"tamaotoshi",          url:at("tamaotoshi"), title:"たまおとし", desc:"玉を落として、ころころ転がるのを見る。",          order:[900,1], icon:"tama", group:"other" },
-    { id:"fuku-asobi",          url:at("fuku-asobi"), title:"ふく あそび",        desc:"息を吹くと、風船がふくらんで、上へ飛んでいく。", order:[900,2], icon:"fuku", group:"other" }
+    { id:"kao-karada-asobi", url:at("kao-karada-asobi"),     title:"かお からだ あそび",     desc:"顔や体の場所を、指さしたり置いたりする。",         order:[7,2],   icon:"kao" }
   ];
 
   /* ===== 絵（文字なし） =========================================== */
