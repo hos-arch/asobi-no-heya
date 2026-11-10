@@ -140,7 +140,9 @@
     { id:"oru-asobi", url:at("oru-asobi"),            title:"おる あそび",            desc:"紙の角と角を合わせて、半分に折る。",               order:[6,3,2], icon:"oru" },
     { id:"kumitate-asobi", url:at("kumitate-asobi"),       title:"くみたて あそび",        desc:"見本の上に、同じ形を重ねて置く。",                 order:[7,1,1], icon:"kumitate" },
     { id:"mihon-kumitate-asobi", url:at("mihon-kumitate-asobi"), title:"みほん くみたて あそび", desc:"見本を見て、となりに同じ形をつくる。",             order:[7,1,2], icon:"mihon" },
-    { id:"kao-karada-asobi", url:at("kao-karada-asobi"),     title:"かお からだ あそび",     desc:"顔や体の場所を、指さしたり置いたりする。",         order:[7,2],   icon:"kao" }
+    { id:"kao-karada-asobi", url:at("kao-karada-asobi"),     title:"かお からだ あそび",     desc:"顔や体の場所を、指さしたり置いたりする。",         order:[7,2],   icon:"kao" },
+    // ここから下は「ほかの あそび」（段階の並びには入れない）
+    { id:"moji-asobi", url:at("moji-asobi"),           title:"もじ あそび",            desc:"ひらがな・カタカナを、書き順どおりに指でなぞる。", order:[1],     icon:"moji", group:"other" }
   ];
 
   /* ===== 絵（文字なし） =========================================== */
@@ -239,6 +241,13 @@
       <path d="M60 83l-5 7h10z" fill="#eaa7b8" ${S}/>
       <path d="M60 90q-8 8 0 14t0 10" fill="none" stroke="#8a7462" stroke-width="2.5" stroke-linecap="round"/>
       <path d="M14 46q8 3 14 0M10 58q10 3 18 0" fill="none" stroke="#86b2d6" stroke-width="4" stroke-linecap="round"/>`},
+    moji:{tint:"#f6ead8", svg:`
+      <rect x="24" y="22" width="72" height="76" rx="8" fill="#fffaf0" ${S}/>
+      <path d="M60 28v64M30 60h60" fill="none" stroke="#c9b79c" stroke-width="1.5" stroke-dasharray="3 4"/>
+      <path d="M40 44h34" fill="none" stroke="#e0707a" stroke-width="8" stroke-linecap="round"/>
+      <path d="M58 34c0 26-6 40-18 50" fill="none" stroke="#4f93cf" stroke-width="8" stroke-linecap="round"/>
+      <path d="M62 62c14-4 22 6 14 16" fill="none" stroke="#d9d0bd" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="62" cy="62" r="7" fill="#5fae78" ${S}/>`},
     star:{tint:"#efe7f5", svg:`
       <path d="M60 18l11 23 25 3-18 17 5 25-23-12-23 12 5-25-18-17 25-3z" fill="#f2c76b" ${S}/>
       <circle cx="52" cy="58" r="2.6" fill="${INK}"/><circle cx="68" cy="58" r="2.6" fill="${INK}"/>
